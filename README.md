@@ -1,11 +1,10 @@
 # Smoothie Frontend
 
-This project is a Smoothie frontend clone with React.js and Tailwind CSS. I have developed 3 pages:  Home page, Search Page, Search result page. Search result page will be visible when we enter a query in search bar. FOr good user experience I have added skeleton loader also.
+Made with React JS &  Tailwind CSS. I have developed 3 pages:  Home page, Search Page, Search result page. Search result page will be visible when we enter a query in search bar. FOr good user experience I have added skeleton loader also.
 
-You can see my developed screens inside my_developed_screens_images folder.
 
 ## Live URL: 
-https://smoothie-clone-piyush-agrawal.netlify.app/
+https://smoothie-music.netlify.app/
 
 ## Features
 
@@ -14,7 +13,6 @@ https://smoothie-clone-piyush-agrawal.netlify.app/
 - View search results
 - View artist and album details
 - Optimize code
-- Song upload
 
 ## Technologies Used
 
@@ -28,10 +26,10 @@ https://smoothie-clone-piyush-agrawal.netlify.app/
 To get started with this project, follow these steps:
 
 1. Clone the repository:
-git clone https://github.com/your-username/smoothie-frontend.git
+git clone https://github.com/piyushAgrawal44/smoothie-music-app.git
 
 2. Navigate to the project directory:
-cd smoothie-frontend
+cd smoothie-music-app
 
 3. Install dependencies
 npm install

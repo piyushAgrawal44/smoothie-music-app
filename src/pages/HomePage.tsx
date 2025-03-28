@@ -10,8 +10,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import SongListCard from '../components/SongListCard';
+import { Autoplay, Pagination } from 'swiper/modules';
 import SongListCard2 from '../components/SongListCard2';
 
 export default function HomePage(props: any) {

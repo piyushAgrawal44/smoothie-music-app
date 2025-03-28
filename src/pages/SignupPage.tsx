@@ -1,27 +1,7 @@
 import Navbar from '../components/Navbar';
-import { useEffect, useState } from 'react';
 
 export default function SignupPage() {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filterCategory, setFilterCategory] = useState('All');
 
-    const [searchLoading, setSearchLoading] = useState(false);
-
-    const searchUserQuery = () => {
-
-
-        // I am not doing any data fetching right know but we can easily do that here 
-
-        setTimeout(() => {
-            setSearchLoading(false);
-        }, 1200); // 1200 ms
-    }
-
-    useEffect(() => {
-        setSearchLoading(true); // show skeleton loader
-        searchUserQuery();
-        // eslint-disable-next-line
-    }, [searchQuery]);
     return (
         <>
             <div className='w-full bg-black text-gray-50 min-h-[calc(100vh-50px)] xm:min-h-screen '>
