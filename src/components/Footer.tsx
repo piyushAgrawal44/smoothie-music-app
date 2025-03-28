@@ -64,16 +64,19 @@ export default function Footer() {
                             <span className=''>Cookies</span>
                             <span className=''>About Ads</span>
                             <span className=''>Accessibility</span>
-                            <span className=''>&copy; {new Date().getFullYear()} Smoothie UB</span>
+                            <Link className="hover:underline" to='/' >Copyright</Link>
+                            <Link className="hover:underline" to='/' >Privacy</Link>
+                            <Link className="hover:underline" to='/' >Terms of Use</Link>
+                            <span className=''>&copy; {new Date().getFullYear()} Smoothie</span>
                         </div>
 
                         <div className="w-fit cursor-pointer mt-2 rounded-[24px] px-2 py-1 text-[12px] border-[0.5px] hover:border-[1.4px] border-gray-300 hover:border-gray-100">
                             <i className='bi bi-globe'></i> English
                         </div>
                     </div>
-                    <div className="flex justify-between items-center text-sm">
+                    <div className="flex justify-between items-center gap-4 text-sm">
                         <p className='hidden lg:block text-gray-300 text-sm my-10'>&copy; {new Date().getFullYear()} Smoothie</p>
-                        <div className="flex gap-2">
+                        <div className="hidden lg:flex gap-2">
                             <Link className="hover:underline" to='/' >Copyright</Link>
                             <span>|</span>
                             <Link className="hover:underline" to='/' >Privacy</Link>

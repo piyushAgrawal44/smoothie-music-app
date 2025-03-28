@@ -63,7 +63,7 @@ export default function HomePage(props: any) {
                                         <div className={`relative w-full p-6 py-10  text-white ${item.gradientColor} rounded-lg shadow-lg`}>
                                             <div className='flex flex-wrap justify-between items-center gap-4'>
                                                 <div>
-                                                    <div className="text-4xl mb-2">{item.icon}</div>
+                                                    <div className="hidden md:block text-4xl mb-2">{item.icon}</div>
                                                     <h1 className="text-3xl font-bold">{item.title}</h1>
                                                     <p className="text-sm opacity-90 mt-1">{item.subtitle}</p>
 
@@ -74,11 +74,9 @@ export default function HomePage(props: any) {
                                                         Explore
                                                     </button>
                                                 </div>
-                                                <div className='shrink-0'>
+                                                <div className='shrink-0 order-first md:order-last'>
                                                     <SongListCard2 song={data.songs[index]} />
                                                 </div>
-
-
                                             </div>
                                             <Link to="/" className="flex items-center gap-1 absolute lg:!bottom-2 right-5">
                                                 <span className='text-xl md:text-3xl font-semibold whitespace-nowrap'><i className="bi bi-music-note-list"></i></span>
@@ -112,6 +110,21 @@ export default function HomePage(props: any) {
                             <div className='mb-7'>
                                 <div className='flex flex-wrap items-center justify-between'>
                                     <SectionTitle text="Sleep" />
+                                    <Link to="/" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
+                                </div>
+                                <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap'>
+
+                                    {
+                                        data.smoothie_playlist.map((image, index) => {
+                                            return <Card key={index} image={image} />
+                                        })
+                                    }
+                                </div>
+                            </div>
+
+                            <div className='mb-7'>
+                                <div className='flex flex-wrap items-center justify-between'>
+                                    <SectionTitle text="Love" />
                                     <Link to="/" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
                                 </div>
                                 <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap'>
