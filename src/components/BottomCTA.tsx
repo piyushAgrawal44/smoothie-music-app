@@ -5,7 +5,7 @@ export default function BottomCTA({showCtaAlert, handleClose}:{handleClose: any,
    
     return (
         <>
-            {showCtaAlert && <div className='hidden lg:block bg-gradient-to-r from-[#ae2896] to-[#519af4] fixed w-[calc(100%-12px)] left-[6px] bottom-2 p-2 z-20'>
+            {showCtaAlert && <div className='hidden lg:block bg-gradient-to-r from-[#ae2896] to-[#519af4] fixed w-[calc(100%-16px)] left-[8px] bottom-3 p-2 z-20'>
                 <div className='flex gap-2 justify-between items-center'>
                     <div className='text-[12px] font-medium'>
                         <p>Preview of smoothie</p>

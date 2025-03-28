@@ -4,6 +4,7 @@ import SearchPage from "./pages/SearchPage"
 import LoginPage from "./pages/LoginPage"
 import SignupPage from "./pages/SignupPage"
 import { useState } from "react"
+import MusicPlayer from "./components/MusicPlayer"
 
 function App() {
   const [showCtaAlert, setShowCtaAlert] = useState(!(localStorage.getItem("Bottom-CTA-Closed")));
@@ -22,6 +23,8 @@ function App() {
             <Route path='/signup' element={<SignupPage />} />
           </Routes>
         </Router>
+
+        <MusicPlayer />
       </div>
     </>
   )
