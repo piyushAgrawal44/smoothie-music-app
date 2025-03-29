@@ -1,19 +1,27 @@
 import Navbar from '../components/Navbar'
 import SectionTitle from '../components/SectionTitle'
 import Sidebar from '../components/Sidebar';
-import data from '../data';
 import Footer from '../components/Footer';
 import BottomCTA from '../components/BottomCTA';
 import CategoryCard from '../components/CategoryCard';
 import { useEffect, useState } from 'react';
 import SongListCard from '../components/SongListCard';
 import Card from '../components/Card';
+import data from "../data"
+import { RootState } from "../store/store";
 
-export default function SearchPage(props:any) {
+import { useDispatch, useSelector } from "react-redux";
+import { playSelectedSong } from "../store/storeSlice";
+
+export default function SearchPage(props: any) {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterCategory, setFilterCategory] = useState('All');
 
     const [searchLoading, setSearchLoading] = useState(false);
+
+    const songIndex=0;
+    const storeVariable=useSelector((state: RootState) => state.musicPlayer);
+    const dispatch=useDispatch();
 
     const searchUserQuery = () => {
 
@@ -43,7 +51,7 @@ export default function SearchPage(props:any) {
                         {searchQuery.length > 0 && !searchLoading && <div className='mt-2 flex flex-nowrap gap-3 overflow-x-auto hide-scrollbar items-center'>
                             {
                                 data.search_result_category.map((category, index) => {
-                                    return <div key={index} onClick={()=>{setFilterCategory(category)}} className={`px-2 py-1 text-[12px] rounded-[16px] min-w-fit ${filterCategory === category ? 'bg-gray-50 text-gray-900' : 'bg-[#242424] text-gray-50'}`}>
+                                    return <div key={index} onClick={() => { setFilterCategory(category) }} className={`px-2 py-1 text-[12px] rounded-[16px] min-w-fit ${filterCategory === category ? 'bg-gray-50 text-gray-900' : 'bg-[#242424] text-gray-50'}`}>
                                         {category}
                                     </div>
                                 })
@@ -64,13 +72,15 @@ export default function SearchPage(props:any) {
                                             </div>
                                             <div className='mt-1 relative w-full overflow-hidden flex flex-nowrap sm:flex-wrap group'>
                                                 <div className='bg-[#181818] hover:bg-[#282828] rounded-md py-4 px-5 w-full'>
-                                                    <img src={data.songs[0].thumbnail} className='rounded-md max-w-[80px]' alt="" />
-                                                    <h6 className='text-xl font-bold mt-2 line-clamp-1'>{data.songs[0].name}</h6>
-                                                    <p className='text-[10px] mt-1'><span className='text-[#a7a7a7]'>Song</span> ~ <span>{data.songs[0].author}</span></p>
+                                                    <img src={data.smoothie_playlist[0].thumbnail} className='rounded-md max-w-[80px]' alt="" />
+                                                    <h6 className='text-xl font-bold mt-2 line-clamp-1'>{data.smoothie_playlist[0].title}</h6>
+                                                    <p className='text-[10px] mt-1'><span className='text-[#a7a7a7]'>Song</span> ~ <span>{data.smoothie_playlist[0].author}</span></p>
                                                 </div>
                                                 <div className='absolute bottom-[10px] xm:bottom-[-100%] xm:group-hover:bottom-[10px] transition-all right-[10px]   bg-[]'>
-                                                    <div className="cursor-pointer rounded-full w-10 h-10 p-2 bg-green-400 text-black text-center">
-                                                        <i className='bi bi-play-fill'></i>
+                                                    <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 p-2 bg-green-400 text-black flex items-center justify-center" onClick={() => {
+                                                        dispatch(playSelectedSong(songIndex));
+                                                    }}>
+                                                        {(songIndex == storeVariable.currentSongIndex && storeVariable.isPlaying) ? <><i className='bi bi-pause-fill'></i></> : <i className='bi bi-play-fill'></i>}
                                                     </div>
                                                 </div>
                                             </div>
@@ -81,7 +91,7 @@ export default function SearchPage(props:any) {
                                             </div>
                                             <div className='mt-1 relative w-full flex flex-wrap max-h-[250px] overflow-auto custom_scrollbar'>
                                                 {
-                                                    data.songs.map((song, index) => {
+                                                    data.smoothie_playlist.map((song, index) => {
                                                         return <div key={index} className='w-full mb-2'>
                                                             <SongListCard song={song} />
                                                         </div>
@@ -212,7 +222,7 @@ export default function SearchPage(props:any) {
                                     <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap '>
 
                                         {
-                                            data.smoothie_playlist.map((image, index) => {
+                                            data.smoothie_categories.map((image, index) => {
                                                 return <CategoryCard key={index} index={index} image={image} />
                                             })
                                         }

@@ -10,7 +10,7 @@ export default function SongListCard(props: any) {
                         </div>
                     </div>
                     <div className="">
-                        <h6 className="text-sm mb-1 line-clamp-1">{props.song.name}</h6>
+                        <h6 className="text-sm mb-1 line-clamp-1">{props.song.title}</h6>
                         <p className="text-[10px] text-[#a7a7a7]">{props.song.author}</p>
                     </div>
                 </div>

@@ -22,9 +22,9 @@ function App() {
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<SignupPage />} />
           </Routes>
+          <MusicPlayer />
         </Router>
 
-        <MusicPlayer />
       </div>
     </>
   )

@@ -70,3 +70,25 @@ body{
       background-position: 100px 0;
   }
 }
+
+
+@keyframes equalizer {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+.animate-equalizer1 {
+  animation: equalizer 0.5s infinite alternate ease-in-out;
+}
+
+.animate-equalizer2 {
+  animation: equalizer 0.5s infinite alternate ease-in-out;
+  animation-delay: 0.2s; /* Small delay for variation */
+}
+
+.animate-equalizer3 {
+  animation: equalizer 0.5s infinite alternate ease-in-out;
+  animation-delay: 0.4s; /* Third bar moves later */
+}
+
+

@@ -1,7 +1,12 @@
 import data from "../data"
+import { RootState } from "../store/store";
 
+import { useDispatch, useSelector } from "react-redux";
+import { playSelectedSong } from "../store/storeSlice";
 export default function SongListCard2(props: any) {
     const songIndex=data.smoothie_playlist.findIndex((item)=>item.id==props.song.id);
+    const storeVariable=useSelector((state: RootState) => state.musicPlayer);
+    const dispatch=useDispatch();
     return (
         <>
             <div className="md:w-[400px] p-2 bg-[#282828] rounded-lg group relative overflow-hidden">
@@ -21,10 +26,9 @@ export default function SongListCard2(props: any) {
                 <div className='absolute bottom-0 right-0  transition-all left-0 w-full h-full flex justify-end items-end p-2'
                 >
                     <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 p-2 bg-green-400 text-black flex items-center justify-center" onClick={()=>{
-                        props.setCurrentSongIndex(songIndex);
-                        props.playPauseHandler();
+                      dispatch(playSelectedSong(songIndex));
                     }}>
-                        {(songIndex==props.currentSongIndex && props.isPlaying)?<><i className='bi bi-pause-fill'></i></>:<i className='bi bi-play-fill'></i>}
+                        {(songIndex==storeVariable.currentSongIndex && storeVariable.isPlaying)?<><i className='bi bi-pause-fill'></i></>:<i className='bi bi-play-fill'></i>}
                     </div>
                 </div>
             </div>

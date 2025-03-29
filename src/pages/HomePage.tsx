@@ -55,6 +55,8 @@ export default function HomePage(props: any) {
                                 slidesPerView={1}
                                 autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true }}
                                 pagination={{ clickable: true }}
+                                onTouchStart={(swiper) => swiper.autoplay.stop()} // Stop autoplay when touched
+                                onTouchEnd={(swiper) => swiper.autoplay.start()}
                                 className="rounded-md"
                             >
                                 {slider.map((item, index) => (

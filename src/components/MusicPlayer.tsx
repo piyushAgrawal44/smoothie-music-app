@@ -6,6 +6,8 @@ import data from "../data";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { nextSong, playPause, prevSong, setCurrentTime, setDuration, setShowVolume, setVolume } from "../store/storeSlice";
+import AudioPlayingAnimation from "./ui/AudioPlayingAnimation";
+import { useLocation } from "react-router-dom";
 
 const songs = data.smoothie_playlist || [];
 
@@ -65,8 +67,13 @@ const MusicPlayer: React.FC = () => {
             });
 
             waveSurferRef.current.on("finish", () => {
-                nextSong();
+                nextSongHelper();
             });
+        }
+
+        if(audioRef){
+            audioRef.current?.play();
+            waveSurferRef.current?.play();
         }
 
         return () => {
@@ -109,6 +116,7 @@ const MusicPlayer: React.FC = () => {
             waveSurferRef.current.stop(); // Stop current playback
             waveSurferRef.current.seekTo(0);
         }
+
         dispatch(prevSong());
     };
 
@@ -146,7 +154,7 @@ const MusicPlayer: React.FC = () => {
 
 
     const [playMenuOpen, setPlayMenuOpen] = useState(false);
-
+    const currentUrl=useLocation();
 
     return (
         <div className="absolute w-[calc(100%-30px)] left-[15px] bottom-5">
@@ -255,7 +263,9 @@ const MusicPlayer: React.FC = () => {
                 </div>
 
             </div>
-            <button type="button" className={`bg-gray-50 text-black  flex justify-center items-center  ${playMenuOpen ? 'rounded-full w-6 h-6 -top-3 -right-1 text-sm ' : 'rounded-lg w-10 h-10 -top-10 -right-0 text-lg'} absolute  z-50`} onClick={() => { setPlayMenuOpen(!playMenuOpen) }}><i className={`bi ${playMenuOpen ? 'bi-chevron-double-down' : 'bi-play-fill'}`}></i></button>
+            {(currentUrl.pathname =="/" || currentUrl.pathname=="/search") && <button type="button" className={`bg-gray-50 text-black  flex justify-center items-center  ${playMenuOpen ? 'rounded-full w-6 h-6 -top-3 -right-1 text-sm ' : 'rounded-lg w-10 h-10 -top-10 -right-0 text-lg'} absolute  z-50`} onClick={() => { setPlayMenuOpen(!playMenuOpen) }}>
+                {(isPlaying && !playMenuOpen)? <AudioPlayingAnimation /> :<i className={`bi ${playMenuOpen ? 'bi-chevron-double-down' : 'bi-play-fill'}`}></i>}
+            </button>}
         </div>
     );
 };

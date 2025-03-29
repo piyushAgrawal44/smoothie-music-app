@@ -10,7 +10,7 @@ const data={
             desc: "Glory to Lord Hanuman",
             type: "CHALISA",
             author: "T Series",
-            duration: "9:43",
+            duration: "9:46",
             src: "/songs/song1.mp3",
         },
         {
@@ -210,6 +210,28 @@ const data={
             duration: "3:42",
             src: "/songs/song3.mp3",
         },
+    ],
+    smoothie_categories: [
+        {
+            title: "Chalisa",
+            value: "CHALISA",
+            thumbnail: "/images/hanuman-chalisa.jpg",
+        },
+        {
+            title: "Bhajan",
+            value: "BHAJAN",
+            thumbnail: "/images/durga-chalisa.jpg",
+        },
+        {
+            title: "Spiritual Song",
+            value: "SPIRITUAL-SONG",
+            thumbnail: "/images/song1.jpg",
+        },
+        {
+            title: "Podcast",
+            value: "SPIRITUAL-PODCAST",
+            thumbnail: "/images/bhagavad-gita.jpg",
+        }
     ],
     search_result_category: [
         "All",
