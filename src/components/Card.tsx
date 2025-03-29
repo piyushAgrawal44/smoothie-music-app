@@ -7,7 +7,7 @@ export default function Card(props: any) {
                     <div className='max-w-full p-3 rounded-md'
                     >
                         <div className="relative overflow-hidden cursor-pointer ">
-                            <img className={`w-full ${props.image_rounded?'rounded-full':'rounded-md'}`} src={props.image.thumbnail} alt="song_thumbnail" />
+                            <img className={`w-full ${props.image_rounded?'rounded-full':'rounded-md'} w-[250px] h-[90px] object-contain`} src={props.image.thumbnail}  alt="song_thumbnail" />
                             <div className='absolute top-[-100%] xm:group-hover:top-0 transition-all left-0 w-full h-full flex justify-end items-end p-2 bg-[]'
                             >
                                 <div className="cursor-pointer rounded-full w-10 h-10 p-2 bg-green-400 text-black text-center">

@@ -2,27 +2,34 @@ import React, { useRef, useState, useEffect } from "react";
 import WaveSurfer from "wavesurfer.js";
 import { FaPlay, FaPause, FaForward, FaBackward, FaVolumeUp, } from "react-icons/fa";
 import { formatTime } from "../helper/helper";
+import data from "../data";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { nextSong, playPause, prevSong, setCurrentTime, setDuration, setShowVolume, setVolume } from "../store/storeSlice";
 
-const songs = [
-    { title: "Song 1", artist: "Artist 1", src: "/songs/song1.mp3", cover: "https://i.scdn.co/image/ab67706f00000002af29338e415c87776e74a574" },
-    { title: "Song 2", artist: "Artist 2", src: "/songs/song1.mp3", cover: "https://i.scdn.co/image/ab67706f00000002af29338e415c87776e74a574" },
-    { title: "Song 3", artist: "Artist 3", src: "/songs/song1.mp3", cover: "https://i.scdn.co/image/ab67706f00000002af29338e415c87776e74a574" },
-    { title: "Song 4", artist: "Artist 4", src: "/songs/song1.mp3", cover: "https://i.scdn.co/image/ab67706f00000002af29338e415c87776e74a574" },
-    { title: "Song 5", artist: "Artist 5", src: "/songs/song1.mp3", cover: "https://i.scdn.co/image/ab67706f00000002af29338e415c87776e74a574" },
-];
+const songs = data.smoothie_playlist || [];
 
 const MusicPlayer: React.FC = () => {
-    const [currentSongIndex, setCurrentSongIndex] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState(1);
-    const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [showVolume, setShowVolume] = useState(false);
+    const dispatch = useDispatch();
+    const {
+        currentSongIndex,
+        isPlaying,
+        volume,
+        currentTime,
+        duration,
+        showVolume
+    } = useSelector((state: RootState) => state.musicPlayer);
+
     const waveRef = useRef<HTMLDivElement>(null);
     const audioRef = useRef<HTMLAudioElement>(null);
     const waveSurferRef = useRef<WaveSurfer | null>(null);
+
     useEffect(() => {
         if (waveRef.current) {
+            if (waveSurferRef.current) {
+                waveSurferRef.current.destroy(); // Destroy previous instance
+            }
+
             waveSurferRef.current = WaveSurfer.create({
                 container: waveRef.current,
                 waveColor: "#ccc",
@@ -32,12 +39,33 @@ const MusicPlayer: React.FC = () => {
             });
 
             waveSurferRef.current.load(songs[currentSongIndex].src);
+
             waveSurferRef.current.on("ready", () => {
-                setDuration(waveSurferRef.current?.getDuration() || 0);
+                dispatch(setDuration(waveSurferRef.current?.getDuration() || 0));
             });
 
             waveSurferRef.current.on("audioprocess", () => {
-                setCurrentTime(waveSurferRef.current?.getCurrentTime() || 0);
+                dispatch(setCurrentTime(waveSurferRef.current?.getCurrentTime() || 0));
+            });
+
+            // 🔥 Fix: Sync with <audio> when seeking
+            waveSurferRef.current.on("seeking", (progress:number) => {
+
+                if (audioRef.current) {
+                    audioRef.current.pause(); // Stop previous playback
+                    const newTime = progress * (waveSurferRef.current?.getDuration() || 0);
+                    audioRef.current.currentTime = newTime;
+                  
+                    if (isPlaying) {
+                        setTimeout(() => {
+                            audioRef.current?.play(); // Resume playback at the correct time
+                        }, 100);
+                    }
+                }
+            });
+
+            waveSurferRef.current.on("finish", () => {
+                nextSong();
             });
         }
 
@@ -45,6 +73,7 @@ const MusicPlayer: React.FC = () => {
             waveSurferRef.current?.destroy();
         };
     }, [currentSongIndex]);
+
 
     const playPauseHandler = () => {
         if (isPlaying) {
@@ -54,22 +83,39 @@ const MusicPlayer: React.FC = () => {
             audioRef.current?.play();
             waveSurferRef.current?.play();
         }
-        setIsPlaying(!isPlaying);
+        dispatch(playPause());
     };
 
-    const nextSong = () => {
-        setCurrentSongIndex((prev) => (prev + 1) % songs.length);
-        setIsPlaying(false);
+    const nextSongHelper = () => {
+        if (audioRef.current) {
+            audioRef.current.pause(); // Stop previous stream
+            audioRef.current.currentTime = 0.0;
+        }
+
+        if (waveSurferRef.current) {
+            waveSurferRef.current.stop(); // Stop current playback
+            waveSurferRef.current.seekTo(0);
+        }
+        dispatch(nextSong());
     };
 
-    const prevSong = () => {
-        setCurrentSongIndex((prev) => (prev - 1 + songs.length) % songs.length);
-        setIsPlaying(false);
+    const prevSongHelper = () => {
+        if (audioRef.current) {
+            audioRef.current.pause(); // Stop previous stream
+            audioRef.current.currentTime = 0.0;
+        }
+
+        if (waveSurferRef.current) {
+            waveSurferRef.current.stop(); // Stop current playback
+            waveSurferRef.current.seekTo(0);
+        }
+        dispatch(prevSong());
     };
+
 
     const volumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseFloat(e.target.value);
-        setVolume(newVolume);
+        dispatch(setVolume(newVolume));
         if (audioRef.current) {
             audioRef.current.volume = newVolume;
         }
@@ -77,14 +123,34 @@ const MusicPlayer: React.FC = () => {
 
     const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
         const seekTime = parseFloat(e.target.value);
-        waveSurferRef.current?.seekTo(seekTime / duration);
+
+        if (waveSurferRef.current) {
+            waveSurferRef.current.pause(); // Stop current playback
+            waveSurferRef.current.seekTo(seekTime / duration);
+        }
+
+        if (audioRef.current) {
+            audioRef.current.pause(); // Stop previous stream
+            audioRef.current.currentTime = seekTime;
+        }
+
         setCurrentTime(seekTime);
+
+        if (isPlaying) {
+            setTimeout(() => {
+                waveSurferRef.current?.play();
+                audioRef.current?.play();
+            }, 100); // Ensure playback resumes after seeking
+        }
     };
+
+
     const [playMenuOpen, setPlayMenuOpen] = useState(false);
+
 
     return (
         <div className="absolute w-[calc(100%-30px)] left-[15px] bottom-5">
-            <div className={`bg-gray-900 text-white px-6 py-2 rounded-lg drop-shadow-lg border border-gray-700 backdrop z-40 ${playMenuOpen?"absolute":"hidden"} w-full left-0 bottom-0`}>
+            <div className={`bg-gray-900 text-white px-6 py-2 rounded-lg drop-shadow-lg border border-gray-700 backdrop z-40 ${playMenuOpen ? "absolute" : "hidden"} w-full left-0 bottom-0`}>
 
                 {/* Progress Bar */}
                 <div className="w-full flex md:hidden justify-between items-center gap-5 ">
@@ -103,7 +169,7 @@ const MusicPlayer: React.FC = () => {
                     {/* Volume Control (Small Button) */}
                     <div className="relative">
                         <button
-                            onClick={() => setShowVolume(!showVolume)}
+                            onClick={() => dispatch(setShowVolume(!showVolume))}
                             className="text-gray-400 hover:text-white text-lg mt-2"
                         >
                             <FaVolumeUp />
@@ -129,12 +195,12 @@ const MusicPlayer: React.FC = () => {
                     <div className="flex items-center gap-2 shrink-0">
                         {/* Album Art */}
                         <div className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-lg overflow-hidden shadow-lg">
-                            <img src={songs[currentSongIndex].cover} alt="Album Art" className="w-full h-full object-cover" />
+                            <img src={songs[currentSongIndex].thumbnail} alt="Album Art" className="w-full h-full object-cover" />
                         </div>
                         <div className="">
                             {/* Song Title & Artist */}
                             <h2 className=" md:text-xl font-bold line-clamp-1">{songs[currentSongIndex].title}</h2>
-                            <p className="text-xs md:text-sm text-gray-400 line-clamp-1">{songs[currentSongIndex].artist}</p>
+                            <p className="text-xs md:text-sm text-gray-400 line-clamp-1">{songs[currentSongIndex].author}</p>
                         </div>
                     </div>
                     {/* Progress Bar */}
@@ -151,7 +217,7 @@ const MusicPlayer: React.FC = () => {
                         </div>
                         <div className="relative">
                             <button
-                                onClick={() => setShowVolume(!showVolume)}
+                                onClick={() => dispatch(setShowVolume(!showVolume))}
                                 className="text-gray-400 hover:text-white text-sm md:text-lg mt-1"
                             >
                                 <FaVolumeUp />
@@ -176,20 +242,20 @@ const MusicPlayer: React.FC = () => {
 
                     {/* Controls */}
                     <div className="flex items-center space-x-3 md:space-x-6 mt-2">
-                        <button onClick={prevSong} className="text-gray-400 hover:text-white text-lg md:text-2xl">
+                        <button onClick={prevSongHelper} className="text-gray-400 hover:text-white text-lg md:text-2xl">
                             <FaBackward />
                         </button>
                         <button onClick={playPauseHandler} className="bg-green-500 p-3 md:p-4 rounded-full text-white text-sm md:text-xl">
                             {isPlaying ? <FaPause /> : <FaPlay />}
                         </button>
-                        <button onClick={nextSong} className="text-gray-400 hover:text-white text-lg md:text-2xl">
+                        <button onClick={nextSongHelper} className="text-gray-400 hover:text-white text-lg md:text-2xl">
                             <FaForward />
                         </button>
                     </div>
                 </div>
 
             </div>
-            <button className="bg-white text-black w-6 h-6 flex justify-center items-center text-sm rounded-full absolute -top-3 -right-1 z-50 " onClick={()=>{setPlayMenuOpen(!playMenuOpen)}}><i className={`bi ${playMenuOpen?'bi-chevron-double-down':'bi-chevron-double-up'}`}></i></button>
+            <button type="button" className={`bg-gray-50 text-black  flex justify-center items-center  ${playMenuOpen ? 'rounded-full w-6 h-6 -top-3 -right-1 text-sm ' : 'rounded-lg w-10 h-10 -top-10 -right-0 text-lg'} absolute  z-50`} onClick={() => { setPlayMenuOpen(!playMenuOpen) }}><i className={`bi ${playMenuOpen ? 'bi-chevron-double-down' : 'bi-play-fill'}`}></i></button>
         </div>
     );
 };

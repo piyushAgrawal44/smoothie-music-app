@@ -40,7 +40,7 @@ export default function Sidebar(props: any) {
               <div className="flex justify-end my-2">
                 <button className='text-gray-50 text-lg' onClick={() => {
                   openMainMenu()
-                }}><i className='bi bi-x-lg'></i></button>
+                }}>Close <i className='bi bi-x-lg'></i></button>
               </div>
               <ul className="font-medium flex flex-col p-4 mt-4 rounded-lg bg-[#242424]">
                 <li className='mb-5'>
@@ -121,7 +121,7 @@ export default function Sidebar(props: any) {
       }
 
 
-      <div className='fixed h-screen max-h-[calc(100vh-64px)] overflow-y-auto hide-scrollbar z-10 hidden lg:block lg:w-[20%] lg:max-w-[307px] pl-2 pt-2'>
+      <div className='fixed h-screen  max-h-[calc(100vh-4px)] overflow-y-auto hide-scrollbar z-10 hidden lg:flex flex-col lg:w-[20%] lg:max-w-[307px] pl-2 pt-2'>
         <nav className="bg-[#121212] rounded-md ">
           <div className="p-4">
             <Link to="/" className="flex items-center gap-1">
@@ -156,7 +156,7 @@ export default function Sidebar(props: any) {
           </div>
         </nav>
 
-        <nav className="bg-[#121212] rounded-md mt-5">
+        <nav className="bg-[#121212] rounded-md mt-5 grow">
           <div className="p-4">
             <div className="flex items-center justify-between text-[#a7a7a7] hover:text-gray-50 focus:text-gray-50 cursor-pointer">
               <p className="self-center  text-lg font-medium whitespace-nowrap ">
@@ -166,7 +166,7 @@ export default function Sidebar(props: any) {
             </div>
 
 
-            <div className="relative my-3 max-h-full overflow-y-auto  custom_scrollbar" >
+            <div className="relative my-3 h-full overflow-y-auto  custom_scrollbar" >
 
               <ul >
                 <li className='mb-5'>

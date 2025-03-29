@@ -18,13 +18,13 @@ export default function HomePage(props: any) {
     const slider = [
         {
             title: "Feel the Vibes",
-            subtitle: "Chill with smooth beats",
+            subtitle: "Chill with smooth beats like krishna's flute",
             gradientColor: "bg-gradient-to-r from-[#ff7eb3] to-[#ff758c]",
             icon: "🎵"
         },
         {
             title: "Deep Relaxation",
-            subtitle: "Find your inner peace",
+            subtitle: "Find your inner peace, with spirituality",
             gradientColor: "bg-gradient-to-r from-[#36d1dc] to-[#5b86e5]",
             icon: "🌙"
         },
@@ -74,7 +74,7 @@ export default function HomePage(props: any) {
                                                     </button>
                                                 </div>
                                                 <div className='shrink-0 order-first md:order-last'>
-                                                    <SongListCard2 song={data.songs[index]} />
+                                                    <SongListCard2  song={data.smoothie_playlist[index]} {...props} />
                                                 </div>
                                             </div>
                                             <Link to="/" className="flex items-center gap-1 absolute lg:!bottom-2 right-5">
@@ -93,13 +93,13 @@ export default function HomePage(props: any) {
                         <div className='bg-[#121212] rounded-md p-2 mt-5 sm:mb-16'>
                             <div className='mb-7'>
                                 <div className='flex flex-wrap items-center justify-between'>
-                                    <SectionTitle text="Smoothie Playlist" />
-                                    <Link to="/" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
+                                    <SectionTitle text="Chalisa Playlist" />
+                                    <Link to="/search" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
                                 </div>
                                 <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap'>
 
                                     {
-                                        data.smoothie_playlist.map((image, index) => {
+                                        data.smoothie_playlist.filter((item)=>item.type=="CHALISA").map((image, index) => {
                                             return <Card key={index} index={index} image={image} />
                                         })
                                     }
@@ -108,13 +108,13 @@ export default function HomePage(props: any) {
 
                             <div className='mb-7'>
                                 <div className='flex flex-wrap items-center justify-between'>
-                                    <SectionTitle text="Sleep" />
-                                    <Link to="/" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
+                                    <SectionTitle text="Bhajan Playlist" />
+                                    <Link to="/search" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
                                 </div>
                                 <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap'>
 
                                     {
-                                        data.smoothie_playlist.map((image, index) => {
+                                        data.smoothie_playlist.filter((item)=>item.type=="BHAJAN").map((image, index) => {
                                             return <Card key={index} image={image} />
                                         })
                                     }
@@ -123,13 +123,28 @@ export default function HomePage(props: any) {
 
                             <div className='mb-7'>
                                 <div className='flex flex-wrap items-center justify-between'>
-                                    <SectionTitle text="Love" />
-                                    <Link to="/" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
+                                    <SectionTitle text="Spiritual Song Playlist" />
+                                    <Link to="/search" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
                                 </div>
                                 <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap'>
 
                                     {
-                                        data.smoothie_playlist.map((image, index) => {
+                                        data.smoothie_playlist.filter((item)=>item.type=="SPIRITUAL-SONG").map((image, index) => {
+                                            return <Card key={index} image={image} />
+                                        })
+                                    }
+                                </div>
+                            </div>
+
+                            <div className='mb-7'>
+                                <div className='flex flex-wrap items-center justify-between'>
+                                    <SectionTitle text="Spiritual Podcast Playlist" />
+                                    <Link to="/search" className='text-sm hover:underline'>Show All <i className='bi bi-chevron-right'></i></Link>
+                                </div>
+                                <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap'>
+
+                                    {
+                                        data.smoothie_playlist.filter((item)=>item.type=="SPIRITUAL-PODCAST").map((image, index) => {
                                             return <Card key={index} image={image} />
                                         })
                                     }
