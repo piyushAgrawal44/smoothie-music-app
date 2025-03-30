@@ -23,7 +23,7 @@ export default function Card(props: any) {
             dispatch(playPause());
         }
         else{
-            dispatch(playSelectedSong(songIndex));
+            dispatch(playSelectedSong(songIndex))
         }
     };
 

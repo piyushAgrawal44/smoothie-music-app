@@ -67,9 +67,6 @@ const MusicPlayer: React.FC = () => {
             waveSurferRef.current.on("finish", () => {
                 nextSongHelper();
             });
-
-            audioRef.current?.play();
-            waveSurferRef.current?.play();
         }
 
         return () => {
@@ -78,11 +75,18 @@ const MusicPlayer: React.FC = () => {
             }
 
             if (audioRef.current) {
-                audioRef.current.pause(); 
+                audioRef.current.pause();
                 audioRef.current.currentTime = 0;
             }
         };
     }, [currentSongIndex]);
+
+    useEffect(() => {
+        if (isPlaying) {
+            audioRef.current?.play();
+            waveSurferRef.current?.play();
+        }
+    }, [currentSongIndex, isPlaying])
 
 
     const playPauseHandler = () => {
