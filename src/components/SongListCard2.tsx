@@ -2,11 +2,29 @@ import data from "../data"
 import { RootState } from "../store/store";
 
 import { useDispatch, useSelector } from "react-redux";
-import { playSelectedSong } from "../store/storeSlice";
+import { playPause, playSelectedSong } from "../store/storeSlice";
+import { useMusicPlayer } from "../context/MusicPlayerContext";
 export default function SongListCard2(props: any) {
-    const songIndex=data.smoothie_playlist.findIndex((item)=>item.id==props.song.id);
-    const storeVariable=useSelector((state: RootState) => state.musicPlayer);
-    const dispatch=useDispatch();
+    const songIndex = data.smoothie_playlist.findIndex((item) => item.id == props.song.id);
+    const storeVariable = useSelector((state: RootState) => state.musicPlayer);
+    const dispatch = useDispatch();
+    const { audioRef, waveSurferRef } = useMusicPlayer();
+
+    const playPauseHandler = () => {
+        if(songIndex==storeVariable.currentSongIndex){
+            if (storeVariable.isPlaying) {
+                audioRef.current?.pause();
+                waveSurferRef.current?.pause();
+            } else {
+                audioRef.current?.play();
+                waveSurferRef.current?.play();
+            }
+            dispatch(playPause());
+        }
+        else{
+            dispatch(playSelectedSong(songIndex));
+        }
+    };
     return (
         <>
             <div className="md:w-[400px] p-2 bg-[#282828] rounded-lg group relative overflow-hidden">
@@ -25,10 +43,10 @@ export default function SongListCard2(props: any) {
                 </div>
                 <div className='absolute bottom-0 right-0  transition-all left-0 w-full h-full flex justify-end items-end p-2'
                 >
-                    <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 p-2 bg-green-400 text-black flex items-center justify-center" onClick={()=>{
-                      dispatch(playSelectedSong(songIndex));
+                    <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 p-2 bg-green-400 text-black flex items-center justify-center" onClick={() => {
+                        playPauseHandler();
                     }}>
-                        {(songIndex==storeVariable.currentSongIndex && storeVariable.isPlaying)?<><i className='bi bi-pause-fill'></i></>:<i className='bi bi-play-fill'></i>}
+                        {(songIndex == storeVariable.currentSongIndex && storeVariable.isPlaying) ? <><i className='bi bi-pause-fill'></i></> : <i className='bi bi-play-fill'></i>}
                     </div>
                 </div>
             </div>

@@ -8,6 +8,7 @@ import { RootState } from "../store/store";
 import { nextSong, playPause, prevSong, setCurrentTime, setDuration, setShowVolume, setVolume } from "../store/storeSlice";
 import AudioPlayingAnimation from "./ui/AudioPlayingAnimation";
 import { useLocation } from "react-router-dom";
+import { useMusicPlayer } from "../context/MusicPlayerContext";
 
 const songs = data.smoothie_playlist || [];
 
@@ -23,14 +24,11 @@ const MusicPlayer: React.FC = () => {
     } = useSelector((state: RootState) => state.musicPlayer);
 
     const waveRef = useRef<HTMLDivElement>(null);
-    const audioRef = useRef<HTMLAudioElement>(null);
-    const waveSurferRef = useRef<WaveSurfer | null>(null);
+
+    const { audioRef, waveSurferRef } = useMusicPlayer();
 
     useEffect(() => {
         if (waveRef.current) {
-            if (waveSurferRef.current) {
-                waveSurferRef.current.destroy(); // Destroy previous instance
-            }
 
             waveSurferRef.current = WaveSurfer.create({
                 container: waveRef.current,
@@ -51,13 +49,13 @@ const MusicPlayer: React.FC = () => {
             });
 
             // 🔥 Fix: Sync with <audio> when seeking
-            waveSurferRef.current.on("seeking", (progress:number) => {
+            waveSurferRef.current.on("seeking", (progress: number) => {
 
                 if (audioRef.current) {
                     audioRef.current.pause(); // Stop previous playback
                     const newTime = progress * (waveSurferRef.current?.getDuration() || 0);
                     audioRef.current.currentTime = newTime;
-                  
+
                     if (isPlaying) {
                         setTimeout(() => {
                             audioRef.current?.play(); // Resume playback at the correct time
@@ -69,15 +67,20 @@ const MusicPlayer: React.FC = () => {
             waveSurferRef.current.on("finish", () => {
                 nextSongHelper();
             });
-        }
 
-        if(audioRef){
             audioRef.current?.play();
             waveSurferRef.current?.play();
         }
 
         return () => {
-            waveSurferRef.current?.destroy();
+            if (waveSurferRef.current) {
+                waveSurferRef.current.destroy();
+            }
+
+            if (audioRef.current) {
+                audioRef.current.pause(); 
+                audioRef.current.currentTime = 0;
+            }
         };
     }, [currentSongIndex]);
 
@@ -154,7 +157,7 @@ const MusicPlayer: React.FC = () => {
 
 
     const [playMenuOpen, setPlayMenuOpen] = useState(false);
-    const currentUrl=useLocation();
+    const currentUrl = useLocation();
 
     return (
         <div className="absolute w-[calc(100%-30px)] left-[15px] bottom-5">
@@ -263,8 +266,8 @@ const MusicPlayer: React.FC = () => {
                 </div>
 
             </div>
-            {(currentUrl.pathname =="/" || currentUrl.pathname=="/search") && <button type="button" className={`bg-gray-50 text-black  flex justify-center items-center  ${playMenuOpen ? 'rounded-full w-6 h-6 -top-3 -right-1 text-sm ' : 'rounded-lg w-10 h-10 -top-10 -right-0 text-lg'} absolute  z-50`} onClick={() => { setPlayMenuOpen(!playMenuOpen) }}>
-                {(isPlaying && !playMenuOpen)? <AudioPlayingAnimation /> :<i className={`bi ${playMenuOpen ? 'bi-chevron-double-down' : 'bi-play-fill'}`}></i>}
+            {(currentUrl.pathname == "/" || currentUrl.pathname == "/search") && <button type="button" className={`bg-gray-50 text-black  flex justify-center items-center  ${playMenuOpen ? 'rounded-full w-6 h-6 -top-3 -right-1 text-sm ' : 'rounded-lg w-10 h-10 -top-10 -right-0 text-lg'} absolute  z-50`} onClick={() => { setPlayMenuOpen(!playMenuOpen) }}>
+                {(isPlaying && !playMenuOpen) ? <AudioPlayingAnimation /> : <i className={`bi ${playMenuOpen ? 'bi-chevron-double-down' : 'bi-play-fill'}`}></i>}
             </button>}
         </div>
     );

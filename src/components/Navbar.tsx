@@ -12,7 +12,7 @@ export default function Navbar(props: any) {
   useEffect(() => {
 
     const timeOutId = setTimeout(() => {
-      props.setSearchQuery(userQuery);
+      props?.setSearchQuery(userQuery);
     }, 1000);
     return () => clearTimeout(timeOutId);
 
