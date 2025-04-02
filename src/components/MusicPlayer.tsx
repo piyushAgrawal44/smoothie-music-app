@@ -226,7 +226,7 @@ const MusicPlayer: React.FC = () => {
                             <div className="flex flex-col w-[150px] md:w-[400px]">
                                 {/* Waveform Equalizer */}
                                 <div ref={waveRef} className="w-full my-2"></div>
-                                <audio ref={audioRef} src={songs[currentSongIndex].src} />
+                                {/* <audio ref={audioRef} src={songs[currentSongIndex].src} /> */}
                             </div>
                             <span className="text-xs">{formatTime(duration)}</span>
                         </div>

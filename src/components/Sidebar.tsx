@@ -142,9 +142,9 @@ export default function Sidebar(props: any) {
                 </li>
 
                 <li className='mb-5'>
-                  <Link to="/" className={`flex justify-between items-center lg:text-lg rounded  pl-1 `}>
-                    <span className='text-[#a7a7a7] hover:text-gray-50'>
-                      <span className='select-none text-[16px] md:text-[24px]'><i className="bi bi-bar-chart-line"></i></span>
+                  <Link to="/search" className={`flex justify-between items-center lg:text-lg rounded pl-1 ${props.active === "search" ? 'text-gray-50  font-semibold' : 'text-[#a7a7a7]'}`}>
+                    <span className=''>
+                      <span className='select-none text-[16px] md:text-[24px]'><i className={`bi ${props.active === "search" ? 'bi-bar-chart-line-fill' : 'bi-bar-chart-line'}`}></i></span>
                       &nbsp;&nbsp;&nbsp;
                       <span className='text-[16px] md:text-[14px]'>Trending</span>
                     </span>

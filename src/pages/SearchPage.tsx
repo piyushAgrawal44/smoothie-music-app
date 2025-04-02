@@ -11,7 +11,8 @@ import data from "../data"
 import { RootState } from "../store/store";
 
 import { useDispatch, useSelector } from "react-redux";
-import { playSelectedSong } from "../store/storeSlice";
+import { playPause, playSelectedSong } from "../store/storeSlice";
+import { useMusicPlayer } from "../context/MusicPlayerContext";
 
 export default function SearchPage(props: any) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -20,8 +21,25 @@ export default function SearchPage(props: any) {
     const [searchLoading, setSearchLoading] = useState(false);
 
     const songIndex=0;
-    const storeVariable=useSelector((state: RootState) => state.musicPlayer);
-    const dispatch=useDispatch();
+    const storeVariable = useSelector((state: RootState) => state.musicPlayer);
+    const dispatch = useDispatch();
+    const { audioRef, waveSurferRef } = useMusicPlayer();
+
+    const playPauseHandler = () => {
+        if(songIndex==storeVariable.currentSongIndex){
+            if (storeVariable.isPlaying) {
+                audioRef.current?.pause();
+                waveSurferRef.current?.pause();
+            } else {
+                audioRef.current?.play();
+                waveSurferRef.current?.play();
+            }
+            dispatch(playPause());
+        }
+        else{
+            dispatch(playSelectedSong(songIndex));
+        }
+    };
 
     const searchUserQuery = () => {
 
@@ -78,7 +96,7 @@ export default function SearchPage(props: any) {
                                                 </div>
                                                 <div className='absolute bottom-[10px] xm:bottom-[-100%] xm:group-hover:bottom-[10px] transition-all right-[10px]   bg-[]'>
                                                     <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 p-2 bg-green-400 text-black flex items-center justify-center" onClick={() => {
-                                                        dispatch(playSelectedSong(songIndex));
+                                                        playPauseHandler();
                                                     }}>
                                                         {(songIndex == storeVariable.currentSongIndex && storeVariable.isPlaying) ? <><i className='bi bi-pause-fill'></i></> : <i className='bi bi-play-fill'></i>}
                                                     </div>
@@ -219,7 +237,7 @@ export default function SearchPage(props: any) {
                                     <div className='flex flex-wrap items-center justify-between'>
                                         <SectionTitle text="Browse all" />
                                     </div>
-                                    <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap '>
+                                    <div className='mt-2 relative w-full overflow-x-auto hide-scrollbar flex flex-nowrap sm:flex-wrap' onClick={()=>{setSearchQuery("song")}}>
 
                                         {
                                             data.smoothie_categories.map((image, index) => {
