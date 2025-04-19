@@ -44,12 +44,12 @@ export default function Sidebar(props: any) {
               </div>
               <ul className="font-medium flex flex-col p-4 mt-4 rounded-lg bg-[#242424]">
                 <li className='mb-5'>
-                  <Link to="/login" replace={true} className={`flex items-center lg:text-lg rounded  pl-1 text-gray-50 font-semibold  hover:text-gray-50 `}>
+                  <Link to="/login" className={`flex items-center lg:text-lg rounded  pl-1 text-gray-50 font-semibold  hover:text-gray-50 `}>
                     <span className='text-[16px] md:text-[14px]'>Log in</span>
                   </Link>
                 </li>
                 <li className=''>
-                  <Link to="/signup" replace={true} className={`flex items-center lg:text-lg rounded  pl-1 text-gray-50 font-semibold  hover:text-gray-50 `}>
+                  <Link to="/signup" className={`flex items-center lg:text-lg rounded  pl-1 text-gray-50 font-semibold  hover:text-gray-50 `}>
                     <span className='text-[16px] md:text-[14px]'>Sign up</span>
                   </Link>
                 </li>

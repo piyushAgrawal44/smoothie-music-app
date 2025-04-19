@@ -251,17 +251,17 @@ export default function SearchPage(props: any) {
                             {
                                 searchLoading && searchQuery.length > 0 && <div className="flex flex-wrap justify-center sm:justify-start w-full relative">
                                     <div className="p-2 w-full xm:w-[50%] lg:w-[35%]">
-                                        <div className="w-full h-[180px]  rounded-md animate-shimmer">
+                                        <div className="w-full h-[190px]  rounded-sm animate-shimmer">
                                         </div>
                                     </div>
                                     <div className="p-2 w-full xm:w-[50%] lg:w-[65%]">
-                                        <div className="mb-2 w-full h-[40px] mx-auto  rounded-md animate-shimmer">
+                                        <div className="mb-2 w-full h-[40px] mx-auto  rounded-sm animate-shimmer">
                                         </div>
-                                        <div className="mb-2 w-full h-[40px] mx-auto  rounded-md animate-shimmer">
+                                        <div className="mb-2 w-full h-[40px] mx-auto  rounded-sm animate-shimmer">
                                         </div>
-                                        <div className="mb-2 w-full h-[40px] mx-auto  rounded-md animate-shimmer">
+                                        <div className="mb-2 w-full h-[40px] mx-auto  rounded-sm animate-shimmer">
                                         </div>
-                                        <div className="w-full h-[40px] mx-auto  rounded-md animate-shimmer">
+                                        <div className="w-full h-[40px] mx-auto  rounded-sm animate-shimmer">
                                         </div>
                                     </div>
                                 </div>
