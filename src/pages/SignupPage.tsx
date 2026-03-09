@@ -10,7 +10,7 @@ export default function SignupPage() {
             <div className="absolute inset-0 bg-black bg-opacity-60"></div>
 
             {/* Signup Card */}
-            <div className="relative z-10 w-full max-w-md p-6 bg-gray-900 bg-opacity-95 text-white rounded-lg shadow-lg">
+            <div className="relative z-10 w-full max-w-md p-6 bg-gray-900  bg-opacity-30 sm:bg-opacity-95 text-white rounded-lg shadow-lg">
                 
                 {/* Brand Logo */}
                 <div className="flex justify-center mb-4">
