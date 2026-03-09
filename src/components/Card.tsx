@@ -12,7 +12,7 @@ export default function Card(props: any) {
     const { audioRef, waveSurferRef } = useMusicPlayer();
 
     const playPauseHandler = () => {
-        if(songIndex==storeVariable.currentSongIndex){
+        if (songIndex == storeVariable.currentSongIndex) {
             if (storeVariable.isPlaying) {
                 audioRef.current?.pause();
                 waveSurferRef.current?.pause();
@@ -22,7 +22,7 @@ export default function Card(props: any) {
             }
             dispatch(playPause());
         }
-        else{
+        else {
             dispatch(playSelectedSong(songIndex))
         }
     };
@@ -35,9 +35,9 @@ export default function Card(props: any) {
                     >
                         <div className="relative overflow-hidden cursor-pointer ">
                             <img className={`w-full ${props.image_rounded ? 'rounded-full' : 'rounded-md'} w-[250px] h-[90px] object-contain`} src={props.image.thumbnail} alt="song_thumbnail" />
-                            <div className='absolute top-0 xm:top-[-100%] xm:group-hover:top-0 transition-all left-0 w-full h-full flex justify-end items-end p-2 bg-[]'
+                            <div className='absolute top-0 xm:top-[-100%] xm:group-hover:top-0 transition-all left-0 w-full h-full flex justify-end items-end bg-[]'
                             >
-                                <div className="cursor-pointer rounded-full w-10 h-10 lg:w-10 lg:h-10 p-2 bg-green-400 text-black flex items-center justify-center" onClick={() => {
+                                <div className="cursor-pointer rounded-full w-10 h-10 lg:w-10 lg:h-10 bg-green-400 text-black flex items-center justify-center" onClick={() => {
                                     playPauseHandler();
                                 }}>
                                     {(songIndex == storeVariable.currentSongIndex && storeVariable.isPlaying) ? <><i className='bi bi-pause-fill'></i></> : <i className='bi bi-play-fill'></i>}

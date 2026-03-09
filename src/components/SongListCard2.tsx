@@ -43,7 +43,7 @@ export default function SongListCard2(props: any) {
                 </div>
                 <div className='absolute bottom-0 right-0  transition-all left-0 w-full h-full flex justify-end items-end p-2'
                 >
-                    <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 p-2 bg-green-400 text-black flex items-center justify-center" onClick={() => {
+                    <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 bg-green-400 text-black flex items-center justify-center" onClick={() => {
                         playPauseHandler();
                     }}>
                         {(songIndex == storeVariable.currentSongIndex && storeVariable.isPlaying) ? <><i className='bi bi-pause-fill'></i></> : <i className='bi bi-play-fill'></i>}

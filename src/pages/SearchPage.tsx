@@ -94,8 +94,8 @@ export default function SearchPage(props: any) {
                                                     <h6 className='text-xl font-bold mt-2 line-clamp-1'>{data.smoothie_playlist[0].title}</h6>
                                                     <p className='text-[10px] mt-1'><span className='text-[#a7a7a7]'>Song</span> ~ <span>{data.smoothie_playlist[0].author}</span></p>
                                                 </div>
-                                                <div className='absolute bottom-[10px] xm:bottom-[-100%] xm:group-hover:bottom-[10px] transition-all right-[10px]   bg-[]'>
-                                                    <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 p-2 bg-green-400 text-black flex items-center justify-center" onClick={() => {
+                                                <div className='absolute bottom-[10px] xm:bottom-[-100%] xm:group-hover:bottom-[10px] transition-all right-[10px]'>
+                                                    <div className="cursor-pointer rounded-full w-7 h-7 lg:w-10 lg:h-10 bg-green-400 text-black flex items-center justify-center" onClick={() => {
                                                         playPauseHandler();
                                                     }}>
                                                         {(songIndex == storeVariable.currentSongIndex && storeVariable.isPlaying) ? <><i className='bi bi-pause-fill'></i></> : <i className='bi bi-play-fill'></i>}

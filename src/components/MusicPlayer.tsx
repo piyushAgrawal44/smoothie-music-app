@@ -24,8 +24,25 @@ const MusicPlayer: React.FC = () => {
     } = useSelector((state: RootState) => state.musicPlayer);
 
     const waveRef = useRef<HTMLDivElement>(null);
+    const volumeControlRefMobile = useRef<HTMLDivElement>(null);
+    const volumeControlRefDesktop = useRef<HTMLDivElement>(null);
 
     const { audioRef, waveSurferRef } = useMusicPlayer();
+
+    useEffect(() => {
+        if (!showVolume) return;
+        const handleClickOutside = (e: MouseEvent) => {
+            const target = e.target as Node;
+            if (
+                volumeControlRefMobile.current?.contains(target) ||
+                volumeControlRefDesktop.current?.contains(target)
+            )
+                return;
+            dispatch(setShowVolume(false));
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [showVolume, dispatch]);
 
     useEffect(() => {
         if (waveRef.current) {
@@ -42,6 +59,7 @@ const MusicPlayer: React.FC = () => {
 
             waveSurferRef.current.on("ready", () => {
                 dispatch(setDuration(waveSurferRef.current?.getDuration() || 0));
+                waveSurferRef.current?.setVolume(volume);
             });
 
             waveSurferRef.current.on("audioprocess", () => {
@@ -134,6 +152,7 @@ const MusicPlayer: React.FC = () => {
         if (audioRef.current) {
             audioRef.current.volume = newVolume;
         }
+        waveSurferRef.current?.setVolume(newVolume);
     };
 
     const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,7 +201,7 @@ const MusicPlayer: React.FC = () => {
                         <span className="text-xs">{formatTime(duration)}</span>
                     </div>
                     {/* Volume Control (Small Button) */}
-                    <div className="relative">
+                    <div className="relative" ref={volumeControlRefMobile}>
                         <button
                             onClick={() => dispatch(setShowVolume(!showVolume))}
                             className="text-gray-400 hover:text-white text-lg mt-2"
@@ -207,14 +226,14 @@ const MusicPlayer: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex justify-between">
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex items-center gap-2 shrink-1">
                         {/* Album Art */}
-                        <div className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-lg overflow-hidden shadow-lg">
+                        <div className="w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] md:w-[50px] md:h-[50px] rounded-lg overflow-hidden shadow-lg">
                             <img src={songs[currentSongIndex].thumbnail} alt="Album Art" className="w-full h-full object-cover" />
                         </div>
                         <div className="">
                             {/* Song Title & Artist */}
-                            <h2 className=" md:text-xl font-bold line-clamp-1">{songs[currentSongIndex].title}</h2>
+                            <h2 className="md:text-xl font-bold line-clamp-1">{songs[currentSongIndex].title}</h2>
                             <p className="text-xs md:text-sm text-gray-400 line-clamp-1">{songs[currentSongIndex].author}</p>
                         </div>
                     </div>
@@ -230,7 +249,7 @@ const MusicPlayer: React.FC = () => {
                             </div>
                             <span className="text-xs">{formatTime(duration)}</span>
                         </div>
-                        <div className="relative">
+                        <div className="relative" ref={volumeControlRefDesktop}>
                             <button
                                 onClick={() => dispatch(setShowVolume(!showVolume))}
                                 className="text-gray-400 hover:text-white text-sm md:text-lg mt-1"
@@ -257,21 +276,21 @@ const MusicPlayer: React.FC = () => {
 
                     {/* Controls */}
                     <div className="flex items-center space-x-3 md:space-x-6 mt-2">
-                        <button onClick={prevSongHelper} className="text-gray-400 hover:text-white text-lg md:text-2xl">
+                        <button onClick={prevSongHelper} className="text-gray-400 hover:text-white text-sm md:text-2xl">
                             <FaBackward />
                         </button>
                         <button onClick={playPauseHandler} className="bg-green-500 p-3 md:p-4 rounded-full text-white text-sm md:text-xl">
                             {isPlaying ? <FaPause /> : <FaPlay />}
                         </button>
-                        <button onClick={nextSongHelper} className="text-gray-400 hover:text-white text-lg md:text-2xl">
+                        <button onClick={nextSongHelper} className="text-gray-400 hover:text-white text-sm md:text-2xl">
                             <FaForward />
                         </button>
                     </div>
                 </div>
 
             </div>
-            {(currentUrl.pathname == "/" || currentUrl.pathname == "/search") && <button type="button" className={`bg-gray-50 text-black  flex justify-center items-center  ${playMenuOpen ? 'rounded-full w-6 h-6 -top-3 -right-1 text-sm ' : 'rounded-lg w-10 h-10 -top-10 -right-0 text-lg'} absolute  z-50`} onClick={() => { setPlayMenuOpen(!playMenuOpen) }}>
-                {(isPlaying && !playMenuOpen) ? <AudioPlayingAnimation /> : <i className={`bi ${playMenuOpen ? 'bi-chevron-double-down' : 'bi-play-fill'}`}></i>}
+            {(currentUrl.pathname == "/" || currentUrl.pathname == "/search") && <button type="button" className={`bg-gray-50 text-black flex justify-center items-center  ${playMenuOpen ? 'rounded-full w-6 h-6 -top-3 -right-1 text-xs ' : 'rounded-lg w-10 h-10 -top-10 -right-0 text-lg'} absolute  z-50`} onClick={() => { setPlayMenuOpen(!playMenuOpen) }}>
+                {(isPlaying && !playMenuOpen) ? <AudioPlayingAnimation /> : <i className={`m-0 bi ${playMenuOpen ? 'bi-chevron-double-down' : 'bi-play-fill'}`}></i>}
             </button>}
         </div>
     );
